@@ -1,0 +1,22 @@
+
+{% extends 'base.html' %} <!--从基本模板扩展-->
+{% block title %}首页{% endblock %} <!--首页标题-->
+{% block content %} <!--重写内容块-->
+    {% for article in page_obj.object_list %} <!--从分页的对象列表中遍历文章-->
+        <div class="panel panel-default"> <!--显示文章的面板-->
+            <div class="panel-heading"> <!--面板的头部-->
+                <h3 class="panel-title"> <!--放置内容标题-->
+
+                </h3>
+            </div>
+            <div class="panel-body"> <!--面板的主体-->
+                <p>作者：{{ article.author }} 日期：{{ article.pub_time }}</p>
+                <p>{{ article.content|truncatechars:200|striptags }}</p> <!--过滤器用于仅显示200字符和去除HTML标签-->
+
+            </div>
+
+        </div>
+    {% endfor %}
+      {% include 'paginator.html' %}
+{% endblock %}
+   <!--分页条-->
