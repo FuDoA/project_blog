@@ -19,8 +19,8 @@ from blog import views as blog_view
 urlpatterns = [
     path('', blog_view.Index.as_view()),
     path('admin/', admin.site.urls),
-    path('detail/', blog_view.Detail, name='detail'),
+    path('detail/<int:pk>', blog_view.ArticleDetail.as_view(), name='detail'),
     path('search/',blog_view.Search.as_view(), name='search'),
-
+    path('comment/', blog_view.pub_comment, name='comment'),
 
 ]

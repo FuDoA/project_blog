@@ -6,11 +6,11 @@
         <div class="panel panel-default"> <!--显示文章的面板-->
             <div class="panel-heading"> <!--面板的头部-->
                 <h3 class="panel-title"> <!--放置内容标题-->
-
+                 <a href="{% url 'detail' article.id %}">{{ article.title }}</a>
                 </h3>
             </div>
             <div class="panel-body"> <!--面板的主体-->
-                <p>{{ article.title }}</p>
+
                 <p>作者：{{ article.author }} 日期：{{ article.pub_time }}</p>
                 <p>{{ article.content|truncatechars:200|striptags }}</p> <!--过滤器用于仅显示200字符和去除HTML标签-->
 
