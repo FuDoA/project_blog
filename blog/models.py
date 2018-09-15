@@ -1,5 +1,6 @@
 from django.db import models
-from django.contrib.auth.models import User  # 使用Django自带的用户模型
+#from django.contrib.auth.models import User  # 使用Django自带的用户模型
+from WebUser.models import WebUser
 # Create your models here.
 class Category(models.Model):  # 文章类别
     id = models.IntegerField(primary_key=True)
@@ -24,7 +25,7 @@ class Tag(models.Model):  # 文章标签
 
 class Article(models.Model):  # 文章
     id = models.AutoField(primary_key=True)
-    author = models.ForeignKey(User, on_delete=models.DO_NOTHING, verbose_name='作者')
+    author = models.ForeignKey(WebUser, on_delete=models.DO_NOTHING, verbose_name='作者')
     title = models.CharField('标题', max_length=50)
     content = models.TextField('内容')
     pub_time = models.DateField('日期', auto_now=True)
