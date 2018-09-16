@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% block title %}注册{% endblock %}
+
+{% block javascript %}
+
+<script src="http://cdn.bootcss.com/blueimp-md5/1.1.0/js/md5.min.js"></script>
+<javascript>
+{#用户名不得为空#}
+$(document).ready(function () {
+    $('#user_id').focusout(function () {
+        var user_id = $('#user_id').val();
+        if (user_id ===''){
+            $('#id_msg').html('用户名不得为空');
+            $('#reg').attr('disabled',true);
+        }
+        else {
+            $('#id_msg').html('');
+            $('#reg').attr('disabled',false);
+        }
+    });
+});
+{# 密码重复一致 #}
+$(document).ready(function () {
+    $('#user_psw2,#user_psw2').focusout(function () {
+        var user_psw = $('#user_psw').val();
+        var user_psw2 = $('#user_psw2').val();
+        if (user_psw===''||user_psw2===''){
+             $('#psw_msg').html('密码不得为空');
+             $('#reg').attr('disabled',true);
+        }
+        else if (reg_psw !==reg_psw2){
+             $('#psw_msg').html('输入的密码不一致');
+             $('#reg').attr('disabled',true);}
+             else {
+                $('#psw_msg').html('');
+                $('#reg').attr('disabled',false);}
+            });
+});
+    {# 注册 #}
+$(documnet).ready(function(){
+   $(#reg).onclick(function(){
+        var salt = Math.floor(Math.random() * 999999 + 1);
+        var saltchar = salt.toString();
+        var user_id = $('#user_id').val();
+        var user_psw = $('#user_psw').val();
+        var user_psw_addsalt = reg_psw + saltchar;
+        var user_pswmd5 = md5(reg_psw_addsalt);
+        $.post('/reg',
+        {'user_id': user_id, 'user_pswmd5': user_pswmd5, 'user_salt': saltchar},
+        function(res1){
+            if (res1 =='400' ){
+                $('#id_msg').html('该用户名已经被注册了！！')
+            }
+            else if(res1 =='401' ){
+                $('#id_msg').html('emmm...好像出了点问题')
+            }
+            else if(res1 =='100' ){
+                $('#id_msg').html('注册成功！')
+            }
+        }
+
+   })
+
+})
+</javascript>
+{% endblock %}
+
+
+{% block content %}
+
+    <div class="container" >
+
+            <form>
+            <div class="input-group">
+                <td>用户名</td><input id="user_id" name="user_id" ><text id='id_msg' style="color: red"></text>
+            </div >
+            <div class="input-group">
+                 <td>密码：</td><td><input id="user_psw" name="user_psw" ></td><text id='psw_msg' style="color: red"></text>
+            </div>
+            <div class="input-group">
+                 <td>重新输入密码：</td><td><input id="user_psw2" name="user_psw" ></td>
+            </div>
+            <div class="btn">
+                 <button id="reg" class='btn btn-default'>注册</button>
+
+            </form>
+            </div>
+                <div class="btn" >
+                    <text>已经有账号？</text><button calss="btn btn-default" >登录 </button>
+                </div>
+
+
+
+        </div>
+
+
+
+
+    {% endblock %}
+
+

@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}登录{% endblock %}
+{% block content %}
+    <div class="container" >
+        {% if logined == false %}
+            <form>
+            <div class="input-group">
+                <text>用户名</text><input id="user_id" name="user_id" ><input>
+            </div >
+            <div class="input-group">
+                 <text>密码：</text><input id="user_psw" name="user_psw" ><input>
+            </div>
+            <div class="btn">
+                <button class='btn btn-default'id="login">登录</button>  <button id="reg" class='btn btn-default' onclick="reg">注册</button>
+            </div>
+            </form>
+        {% else %}
+            <div >
+                <p><b>{{ WebUser.id }}</b>已登录</p>
+                <button class='btn btn-default' id="quit" >登出</button>
+            </div>
+
+
+        {%  endif %}
+
+
+        </div>
+
+
+
+
+    {% endblock %}
+
+

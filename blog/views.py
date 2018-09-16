@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.shortcuts import HttpResponse
 from .forms import CommentForm
 # Create your views here.
-from django.views.generic import ListView,DetailView
+from django.views.generic import ListView ,DetailView
 from .models import *
 from django.db.models import Q
 from .forms import CommentForm

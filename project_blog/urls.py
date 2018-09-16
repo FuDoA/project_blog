@@ -16,11 +16,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from blog import views as blog_view
+from WebUser import views as WebUser_view
 urlpatterns = [
     path('', blog_view.Index.as_view()),
     path('admin/', admin.site.urls),
     path('detail/<int:pk>', blog_view.ArticleDetail.as_view(), name='detail'),
     path('search/',blog_view.Search.as_view(), name='search'),
     path('comment/', blog_view.pub_comment, name='comment'),
-
+    path('login',WebUser_view.Login),
+    path('reg',WebUser_view.Reg)
 ]
