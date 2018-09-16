@@ -4,7 +4,7 @@
 {% block javascript %}
 
 <script src="http://cdn.bootcss.com/blueimp-md5/1.1.0/js/md5.min.js"></script>
-<javascript>
+<script>
 {#用户名不得为空#}
 $(document).ready(function () {
     $('#user_id').focusout(function () {
@@ -28,7 +28,7 @@ $(document).ready(function () {
              $('#psw_msg').html('密码不得为空');
              $('#reg').attr('disabled',true);
         }
-        else if (reg_psw !==reg_psw2){
+        else if (user_psw !==user_psw2){
              $('#psw_msg').html('输入的密码不一致');
              $('#reg').attr('disabled',true);}
              else {
@@ -38,7 +38,8 @@ $(document).ready(function () {
 });
     {# 注册 #}
 $(documnet).ready(function(){
-   $(#reg).onclick(function(){
+   $('#reg').click(function(e){
+        e.preventDefault();
         var salt = Math.floor(Math.random() * 999999 + 1);
         var saltchar = salt.toString();
         var user_id = $('#user_id').val();
@@ -57,41 +58,41 @@ $(documnet).ready(function(){
             else if(res1 =='100' ){
                 $('#id_msg').html('注册成功！')
             }
-        }
+        })
 
    })
 
 })
-</javascript>
+</script>
 {% endblock %}
 
 
 {% block content %}
 
-    <div class="container" >
 
-            <form>
+            <div  >
+            <form id="reg_form">
             <div class="input-group">
                 <td>用户名</td><input id="user_id" name="user_id" ><text id='id_msg' style="color: red"></text>
             </div >
             <div class="input-group">
-                 <td>密码：</td><td><input id="user_psw" name="user_psw" ></td><text id='psw_msg' style="color: red"></text>
+                 <td>密码：</td><td><input type='password' id="user_psw" name="user_psw" ></td><text id='psw_msg' style="color: red"></text>
             </div>
             <div class="input-group">
-                 <td>重新输入密码：</td><td><input id="user_psw2" name="user_psw" ></td>
+                 <td>重新输入密码：</td><td><input type="password" id="user_psw2" name="user_psw" ></td>
             </div>
             <div class="btn">
                  <button id="reg" class='btn btn-default'>注册</button>
-
+            </div>
             </form>
             </div>
                 <div class="btn" >
-                    <text>已经有账号？</text><button calss="btn btn-default" >登录 </button>
+                    <text>已经有账号？</text><button type='button' calss="btn btn-default" href="login">登录 </button>
                 </div>
+            </div>
 
 
 
-        </div>
 
 
 
