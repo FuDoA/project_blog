@@ -1,9 +1,45 @@
 from django.shortcuts import render
 from WebUser.models import  WebUser
+import datetime,random
 # Create your views here.
 from django.shortcuts import HttpResponse
+
+
 def Login (request):
-    pass
+    if request.method == 'GET':
+        if request.COOKIES.get('SessionId'):         #有session信息
+            sessionid=request.COOKIES.get('SessionId')
+            user=WebUser.objects.filter(SessionId=sessionid).first()
+            if user.SessionId_time < datetime.datetime.now():       #若session过期
+                return render(request, 'login.html',{'logined': False})
+            else:           #session未过期
+                return render(request,'login.html',{'logined':True,'user':user})
+
+        else:               #无session信息
+            return render(request, 'login.html', {'logined': False})
+
+    elif request.method == 'POST':
+        if not request.POST.get('user_pswmd5'):     #查询salt
+            user_id = request.POST.get('user_id')
+            user = WebUser.objects.filter(id=user_id).first()
+            char = f'{'user_salt': {user.salt}}'
+            return HttpResponse(char)
+        else:                                        #检验加盐密码
+            user_id = request.POST.get('user_id')
+            user = WebUser.objects.filter(id=user_id)
+            user_pswmd5 = request.POST.get('user_pswmd5')
+            if user_pswmd5 == user.pswmd5:          #密码检验成功
+                user.sessionid = str(random.randint(1, 9999999999999999999999))
+                user.sessionid_time = datetime.datetime.now()+datetime.timedelta(day=7)
+                user.save()
+                response = render(request, 'login.html', {'logined': True, 'user': user})
+                response.set_cookie('sessionid', user.sessionid)
+                return response
+            else:
+                return HttpResponse('psw_wrong')  #密码错误
+
+
+
 
 
 
@@ -17,12 +53,12 @@ def Reg (request):
         if WebUser.objects.filter(id=webuser_id):
             return HttpResponse(400)  #返回数字400标识已存在该用户
         else:
-            try:
-                newuser = WebUser(id=webuser_id,salt=webuser_salt,psw_md5=webuser_pswmd5)
-                newuser.save()
-                return HttpResponse(100)  #返回数字100标识注册成功
-            except:
-                return HttpResponse(401) #返回数字401标识意外错误
+            #try:
+            newuser = WebUser(id=webuser_id, salt=webuser_salt,psw_md5=webuser_pswmd5,sessionid_time=datetime.datetime.now())
+            newuser.save()
+            return HttpResponse(100)  #返回数字100标识注册成功
+            #except:
+                #return HttpResponse(401) #返回数字401标识意外错误
 
 
 
