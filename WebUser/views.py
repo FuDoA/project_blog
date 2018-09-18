@@ -7,13 +7,14 @@ from django.shortcuts import HttpResponse
 
 def Login (request):
     if request.method == 'GET':
-        if request.COOKIES.get('SessionId'):         #有session信息
-            sessionid=request.COOKIES.get('SessionId')
-            user=WebUser.objects.filter(SessionId=sessionid).first()
-            if user.SessionId_time < datetime.datetime.now():       #若session过期
+        if request.COOKIES.get('tempid'):         #有session信息
+            tempid = request.COOKIES.get('tempid')
+            user = WebUser.objects.filter(sessionid=tempid).first()
+            tempid_life = user.sessionid_time.replace(tzinfo=None)
+            if tempid_life < datetime.datetime.now():       #若session过期
                 return render(request, 'login.html',{'logined': False})
             else:           #session未过期
-                return render(request,'login.html',{'logined':True,'user':user})
+                return render(request,'login.html',{'logined': True, 'user_id': user.id})
 
         else:               #无session信息
             return render(request, 'login.html', {'logined': False})
@@ -35,12 +36,12 @@ def Login (request):
             if user_id:
                 user = WebUser.objects.filter(id=user_id).first()
             user_pswmd5 = request.POST.get('user_pswmd5')
-            if user_pswmd5 == user.pswmd5:          #密码检验成功
-                user.sessionid = str(random.randint(1, 9999999999999999999999))
-                user.sessionid_time = datetime.datetime.now()+datetime.timedelta(day=7)
+            if user_pswmd5 == user.psw_md5:          #密码检验成功
+                user.sessionid = user.id + ':' + str(random.randint(1, 9999999999999999999999))
+                user.sessionid_time = datetime.datetime.now()+datetime.timedelta(days=7)
                 user.save()
-                response = render(request, 'login.html', {'logined': True, 'user': user})
-                response.set_cookie('tempid', user.sessionid)
+                response = HttpResponse('logined')
+                response.set_cookie(key='tempid', value=user.sessionid, max_age=604800)
                 return response
             else:
                 return HttpResponse('401')  #密码错误

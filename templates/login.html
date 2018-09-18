@@ -11,7 +11,7 @@
         $('#login').click(function(){
             let user_id = $('#user_id').val();
             $.post('/login',{'user_id':user_id},function (res1) {
-                if(res1 == '401'){
+                if(res1 === '401'){
                     $('#id_msg').html('不存在该用户');
 
                 }
@@ -21,10 +21,13 @@
                     let psw_addsalt = psw + salt;
                     let pswmd5  = md5(psw_addsalt);
                     $.post('/login',
-                    {'user_id':user_id,'user_paswmd5':pswmd5},
+                    {'user_id':user_id,'user_pswmd5':pswmd5},
                     function (res2) {
                         if (res2 === '401'){
-                         $('#psw_msg').html('密码错误')
+                            $('#psw_msg').html('密码错误')
+                        }
+                        else if (res2 ==='logined'){
+                            window.location.reload();
                         }
                 })
                 }
@@ -33,7 +36,15 @@
             })
         })
     })
-
+    {# 登出 #}
+    $(document).ready(function () {
+        $('#quit').click(function () {
+            var exp = new Date();
+            exp.setTime(exp.getTime() - 1);
+            document.cookie= 'tempid'+ "=123';expires="+exp.toGMTString();
+            window.location.reload();
+        })
+    })
 </script>
 {% endblock %}
 {% block content %}
@@ -55,7 +66,7 @@
             </div>
         {% else %}
             <div>
-                <p><b><{{ user.id }}></b>已登录</p>
+                <p><b><{{ user_id }}></b>已登录</p>
                 <button class='btn btn-default' id="quit" >登出</button>
             </div>
 
