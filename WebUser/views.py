@@ -20,23 +20,30 @@ def Login (request):
 
     elif request.method == 'POST':
         if not request.POST.get('user_pswmd5'):     #查询salt
-            user_id = request.POST.get('user_id')
-            user = WebUser.objects.filter(id=user_id).first()
-            char = f'{'user_salt': {user.salt}}'
-            return HttpResponse(char)
+            if request.POST.get('user_id'):
+                user_id = request.POST.get('user_id')
+                if WebUser.objects.filter(id=user_id).first():
+                    user = WebUser.objects.filter(id=user_id).first()
+                    return HttpResponse(user.salt)
+                else:
+                    return HttpResponse('401')
+            else:
+                return HttpResponse('401')
+
         else:                                        #检验加盐密码
             user_id = request.POST.get('user_id')
-            user = WebUser.objects.filter(id=user_id)
+            if user_id:
+                user = WebUser.objects.filter(id=user_id).first()
             user_pswmd5 = request.POST.get('user_pswmd5')
             if user_pswmd5 == user.pswmd5:          #密码检验成功
                 user.sessionid = str(random.randint(1, 9999999999999999999999))
                 user.sessionid_time = datetime.datetime.now()+datetime.timedelta(day=7)
                 user.save()
                 response = render(request, 'login.html', {'logined': True, 'user': user})
-                response.set_cookie('sessionid', user.sessionid)
+                response.set_cookie('tempid', user.sessionid)
                 return response
             else:
-                return HttpResponse('psw_wrong')  #密码错误
+                return HttpResponse('401')  #密码错误
 
 
 

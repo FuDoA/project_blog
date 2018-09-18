@@ -37,15 +37,14 @@ $(document).ready(function () {
             });
 });
     {# 注册 #}
-$(documnet).ready(function(){
-   $('#reg').click(function(e){
-        e.preventDefault();
+$(document).ready(function(){
+   $('#reg').click(function(){
         var salt = Math.floor(Math.random() * 999999 + 1);
         var saltchar = salt.toString();
         var user_id = $('#user_id').val();
         var user_psw = $('#user_psw').val();
-        var user_psw_addsalt = reg_psw + saltchar;
-        var user_pswmd5 = md5(reg_psw_addsalt);
+        var user_psw_addsalt = user_psw + saltchar;
+        var user_pswmd5 = md5(user_psw_addsalt);
         $.post('/reg',
         {'user_id': user_id, 'user_pswmd5': user_pswmd5, 'user_salt': saltchar},
         function(res1){
@@ -73,23 +72,23 @@ $(documnet).ready(function(){
             <div  >
             <form id="reg_form">
             <div class="input-group">
-                <td>用户名</td><input id="user_id" name="user_id" ><text id='id_msg' style="color: red"></text>
+                <span>用户名</span><input id="user_id" name="user_id" ><span id='id_msg' style="color: red"></span>
             </div >
             <div class="input-group">
-                 <td>密码：</td><td><input type='password' id="user_psw" name="user_psw" ></td><text id='psw_msg' style="color: red"></text>
+                 <span>密码：</span><input type='password' id="user_psw" name="user_psw" ><span id='psw_msg' style="color: red"></span>
             </div>
             <div class="input-group">
-                 <td>重新输入密码：</td><td><input type="password" id="user_psw2" name="user_psw" ></td>
+                 <span>重新输入密码：</span><input type="password" id="user_psw2" name="user_psw" >
             </div>
             <div class="btn">
-                 <button id="reg" class='btn btn-default'>注册</button>
+                 <button id="reg" type="button" class='btn btn-default'>注册</button>
             </div>
             </form>
             </div>
                 <div class="btn" >
-                    <text>已经有账号？</text><button type='button' calss="btn btn-default" href="login">登录 </button>
+                    <span>已经有账号？</span><button type='button' class="btn btn-default" href="login">登录 </button>
                 </div>
-            </div>
+
 
 
 

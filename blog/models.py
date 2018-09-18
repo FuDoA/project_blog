@@ -2,6 +2,8 @@ from django.db import models
 #from django.contrib.auth.models import User  # 使用Django自带的用户模型
 from WebUser.models import WebUser
 # Create your models here.
+
+
 class Category(models.Model):  # 文章类别
     id = models.IntegerField(primary_key=True)
     name = models.CharField('类别', max_length=20, unique=True)
@@ -12,6 +14,7 @@ class Category(models.Model):  # 文章类别
     def __str__(self):
         return self.name
 
+
 class Tag(models.Model):  # 文章标签
     name = models.CharField('标签', max_length=20, unique=True)
 
@@ -20,7 +23,6 @@ class Tag(models.Model):  # 文章标签
 
     def __str__(self):
         return self.name
-
 
 
 class Article(models.Model):  # 文章
@@ -37,6 +39,7 @@ class Article(models.Model):  # 文章
 
     def __str__(self):
         return self.title
+
 
 class Comment(models.Model):
     id = models.AutoField(primary_key=True)
