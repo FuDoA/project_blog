@@ -11,10 +11,11 @@ def Login (request):
             tempid = request.COOKIES.get('tempid')
             user = WebUser.objects.filter(sessionid=tempid).first()
             tempid_life = user.sessionid_time.replace(tzinfo=None)
+
             if tempid_life < datetime.datetime.now():       #若session过期
                 return render(request, 'login.html',{'logined': False})
             else:           #session未过期
-                return render(request,'login.html',{'logined': True, 'user_id': user.id})
+                return render(request,'login.html',{'logined': True, 'user': user})
 
         else:               #无session信息
             return render(request, 'login.html', {'logined': False})
